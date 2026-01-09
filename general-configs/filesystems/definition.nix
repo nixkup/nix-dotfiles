@@ -133,7 +133,7 @@ in
     
   ];
 
-  # filesystems
+  # filesystem - mutable zone
   boot = {
     supportedFilesystems = [ 
       "zfs" 
