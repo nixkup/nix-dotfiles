@@ -19,8 +19,10 @@
 
 # -------- SERVICES --------
 
-  # SSH
   services = {
+    flatpak.enable = true;
+    logmein-hamachi.enable = true;
+
     openssh = {
       enable = true;
       ports = [ 4080 ]; # porta do servidor ssh
@@ -31,8 +33,7 @@
         AllowUsers = [ "nixkup" ];
       };
     };
-    logmein-hamachi.enable = true; # hamachi
-    # pipewire
+
     pipewire = {
       enable = true;
       pulse.enable = true; # ativa compatibilidade com pulseaudio

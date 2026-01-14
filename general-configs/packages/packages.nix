@@ -35,8 +35,4 @@
     waybar
     labwc
   ];
-
-  services.flatpak = {
-    enable = true;
-  };
 }
