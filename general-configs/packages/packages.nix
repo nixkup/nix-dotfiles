@@ -9,6 +9,7 @@
     kdePackages.qtstyleplugin-kvantum
     gparted
     fastfetch
+    hyfetch
     gnome-disk-utility
     haguichi
 
@@ -34,4 +35,8 @@
     waybar
     labwc
   ];
+
+  services.flatpak = {
+    enable = true;
+  };
 }
