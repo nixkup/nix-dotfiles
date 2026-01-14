@@ -5,7 +5,6 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
 
-    flatpaks.url = "github:gmodena/nix-flatpak/?ref=latest";
     impermanence.url = "github:nix-community/impermanence";
     home-manager.url = "github:nix-community/home-manager";
 
@@ -14,7 +13,6 @@
 
   outputs = inputs @ {
     self,
-    flatpaks,
     nixpkgs-stable,
     nixpkgs,
     impermanence,
@@ -40,10 +38,6 @@
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs.flake-inputs = inputs;
           home-manager.users.nixkup = import ./home-manager/home.nix;
-          
-          home-manager.sharedModules = [
-            flatpaks.homeManagerModules.nix-flatpak
-          ];
         }
       ];
     };
