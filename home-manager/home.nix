@@ -38,6 +38,7 @@
     };
   };
 
+  # não estou usando mais
   programs.waybar = {
     enable = true;
     
