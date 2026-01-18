@@ -2,12 +2,12 @@
 
 # -------- DOCKER --------
 
-# irei adicionar mais coisas em breve :)
-
   virtualisation.docker = {
     enable = false;
+
     daemon.settings = {
       experimental = true;
+
       default-address-pools = [
         {
         base = "172.30.0.0/16"; # define os ips dos containers
@@ -26,6 +26,7 @@
     openssh = {
       enable = true;
       ports = [ 4080 ]; # porta do servidor ssh
+
       settings = {
         PasswordAuthentication = true; # permite login por senha
         KbdInteractiveAuthentication = false; # login interativo
@@ -41,13 +42,48 @@
     };
   };
 
-# -------- NH --------
+# -------- PROGRAMS --------
 
-  # habilita o nh
-  programs.nh = {
-    enable = true;
-    clean.enable = true; # faz o trabalho do cg
-    clean.extraArgs = "--keep-since 4d --keep 3";
-    flake = "/persist/"; # localização da minha flake
+  programs = {
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      autosuggestions.enable = true;
+      syntaxHighlighting.enable = true;
+      
+      shellAliases = {
+        u = "cd ..";
+        l = "ls -a";
+        ll = "ls -l";
+        la = "ls -la";
+        c = "clear";
+        reflink = "cp --reflink=always";
+        pkg = "nix shell";
+        zfreeze = "doas zfs snapshot";
+        bfreeze = "doas btrfs subvolume snapshot";
+        switch = "doas nixos-rebuild switch --flake --specialisation TempHome";
+        update = "doas nixos-rebuild switch --upgrade --flake --specialisation TempHome";
+      };
+
+      ohMyZsh = {
+        enable = true;
+        plugins = [ "git" "z" ];
+        theme = "robbyrussell";
+      };
+      
+      histSize = 10000;
+      histFile = "$HOME/.zsh_history";
+      
+      setOptions = [
+        "HIST_IGNORE_ALL_DUPS"
+      ];
+    };
+
+    nh = {
+      enable = true;
+      clean.enable = true; # faz o trabalho do cg
+      clean.extraArgs = "--keep-since 4d --keep 3";
+      flake = "/home/nixkup/config"; # localização da minha flake
+    };
   };
 }

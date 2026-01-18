@@ -6,15 +6,8 @@
     # coisas úteis
     usbutils
     wget
-    kdePackages.qtstyleplugin-kvantum
     gparted
-    fastfetch
-    hyfetch
-    gnome-disk-utility
     haguichi
-
-    # non-free
-    unrar
     
     # desenvolvimento
     pipenv
@@ -22,17 +15,32 @@
     rustc
     nodejs
     devspace
-    sqlitebrowser
     javaPackages.compiler.openjdk25
 
-    # coisas para WMs & DEs
-    gnome-extension-manager
-    gnome-tweaks
+    # WMs - geral
     alacritty
     wl-clipboard
     swaybg
-    hyprpaper
     waybar
     labwc
+
+    # hyprland
+    hyprshot
+    hyprpaper
+
+    # gnome
+    #gnome-extension-manager
+    #gnome-tweaks
+    #gnome-disk-utility
+
+    # kde plasma
+    kdePackages.dolphin
+    kdePackages.qtstyleplugin-kvantum
+
+    # fonts
+    adwaita-fonts
+
+    # inputs
+    inputs.zen-browser.packages."${stdenv.hostPlatform.system}".default
   ];
 }

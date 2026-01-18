@@ -3,18 +3,21 @@
   services = {
     # LOGIN_MANAGER
     displayManager = {
-      cosmic-greeter.enable = true; # cosmic greeter
+      cosmic-greeter.enable = false; # cosmic greeter
+      
       sddm = { # SDDM
         enable = false;
         wayland.enable = false;
       };
     };
+
     # WAYLAND
     desktopManager = { # DEs
       plasma6.enable = false; # plasma
       cosmic.enable = false; # cosmic
-      gnome.enable = true; # gnome
+      gnome.enable = false; # gnome
     };
+
     # xserver
     xserver = {
       enable = false; # habilita o servidor X
@@ -26,6 +29,7 @@
         i3.enable = false; # i3 WM
         openbox.enable = false; # openbox
       };
+      
       desktopManager = { # DEs
         xfce.enable = false; # xfce
         cinnamon.enable = false; # cinnamon
@@ -35,9 +39,22 @@
 
   # wayland WMs
   programs = {
-    sway.enable = false; # sway
-    hyprland = { # hyprland
+    sway.enable = false;
+    niri.enable = true;
+
+    wayfire = {
       enable = true;
+
+      plugins = with pkgs.wayfirePlugins; [
+        wcm
+        wf-shell
+        wayfire-plugins-extra
+      ];
+    };
+
+    hyprland = {
+      enable = true;
+      withUWSM = true;
       xwayland.enable = true;
     };      
   };
@@ -47,6 +64,7 @@
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
+
     fcitx5.addons = with pkgs; [
       fcitx5-gtk
       qt6Packages.fcitx5-configtool
@@ -55,8 +73,10 @@
 
   environment.variables = {
     GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE  = "fcitx";
-    XMODIFIERS    = "@im=fcitx";
+    QT_IM_MODULE = "fcitx";
+    XMODIFIERS = "@im=fcitx";
+    XDG_SESSION_TYPE = "wayland";
+    XDG_SESSION_DESKTOP = "Hyprland";
   };
 
 # -------- EXCLUDE --------
