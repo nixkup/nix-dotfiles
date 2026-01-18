@@ -20,7 +20,6 @@
 
       # desenvolvimento
       sqlitebrowser
-      neovim
       jetbrains.idea
       vscodium
 
