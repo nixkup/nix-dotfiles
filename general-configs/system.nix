@@ -4,7 +4,8 @@
 
   # define e configura options do boot
   boot = {
-    # kernel e boot
+    loader.systemd-boot.enable = true;
+
     kernelPackages = pkgs.linuxPackages;
     kernelModules = [ # modulos do kernel
       "kvm-amd" 
@@ -12,11 +13,13 @@
       "hid_sony" 
       "uinput" 
     ];
+
     kernelParams = [
       "idle=poll" # pode reduzir latencia
       "amd_pstate=active" # o hardware controla
       # "isolcpus=<cpus>" # isola cores.
     ];
+
     initrd = {
       availableKernelModules = [ 
         "xhci_pci" 
@@ -25,11 +28,11 @@
         "usb_storage" 
         "sd_mod" 
       ];
+
       kernelModules = [ 
         "dm-snapshot" 
       ];
     };
-    loader.systemd-boot.enable = true; # usa systemd-boot
   };
 
   # options do networking
@@ -51,10 +54,12 @@
       automatic = true;
       dates = [ "daily" ]; # otimiza diariamente
     };
+
     gc = { # chama o caminhão de lixo pro nix
       automatic = false;
       dates = [ "weekly" ]; # chama semanalmente
     };
+
     settings = { # configura o uso de várias threads
       max-jobs = "auto"; # usa todos os cores
       cores = 0; # distribui a carga
@@ -84,7 +89,29 @@
     createHome = true;
     home = "/home/nixkup"; 
     hashedPasswordFile = "/nix/passwords/nixkup";
-    extraGroups = [ "wheel" "networkmanager" "vboxusers" "docker" ];
+    shell = pkgs.zsh;
+
+    extraGroups = [ 
+      "wheel" 
+      "networkmanager" 
+      "vboxusers" 
+      "docker" 
+    ];
+  };
+
+# -------- SECURITY --------
+
+  security = {
+    sudo.enable = false;
+
+    doas = {
+      enable = true;
+      extraRules = [{
+        users = [ "nixkup" ];
+        keepEnv = true; 
+        persist = true;
+      }];
+    };
   };
 
 # -------- HARDWARE --------
@@ -103,16 +130,14 @@
   };
 
   hardware = {
-    # cpu microcode
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-    # configura GPU corretamente
     amdgpu.opencl.enable = true;
 
     graphics = {
       enable = true;
       enable32Bit = true;
     };
-    # bluetooth
+
     bluetooth = {
       enable = true;
       powerOnBoot = true; # inicia o bluetooth no boot
