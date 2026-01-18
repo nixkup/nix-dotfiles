@@ -40,6 +40,7 @@
 		];
 		files = [
 		  "/etc/machine-id"
+      "/root/.gitconfig"
 		];
 	};	
 }

@@ -7,8 +7,7 @@
     users = {
       nixkup = {
         directories = [
-          ".cache/nix"
-          ".cache/flatpak"
+          ".cache"
           ".ssh"
           "Desktop"
           "Pictures"
@@ -21,13 +20,12 @@
           ".pki"
           ".vscode-oss"
           ".mozilla"
+          ".zen"
           ".themes"
           ".icons"
         ];
         files = [ 
-          ".gitconfig" 
-          ".env"
-          ".gtkrc-2.0"
+          ".zshenv"
         ];
       };
     };
