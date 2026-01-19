@@ -98,8 +98,8 @@
 		success "operação encerrada pelo usuário"; exit 130;;
 	fi
 
-	read -p "Digite o nome de usuário (deve ser o mesmo do sistema e home): " name
-	read -p "Qual o link do repositório git? " github
+	read -p "Digite o nome de usuário (deve ser o mesmo do sistema): " name
+	read -p "Qual o link do repositório git? " git
 
 	clear
 

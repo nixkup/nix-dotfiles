@@ -60,44 +60,14 @@
 		done
 	}
 
-	boot() {
-		# reconstroi o disco com gpt
-		wipefs -a $system_disk
-		parted $system_disk mklabel $gptOrMbr
-
-		# cria particao de 1GB para boot
-		parted -a optimal $system_disk mkpart primary 0% 1GB
-
-		# formata a particao de boot para fat32
-		mkfs.fat -F 32 -n BOOT ${system_disk}1
-		sync
-
-		# flags de para particao boot
-		parted $system_disk \
-		    set 1 esp on \
-			set 1 boot on \
-
-		# cria a segunda particao usando o restante do disco
-		case $separete_home in
-		    s|sim)
-		        parted -a optimal $system_disk mkpart primary 1GB 100%;;
-			n|nao)
-			    parted -a optimal \
-					$system_disk mkpart primary 1G 25% \
-					$system_disk mkpart primary 25% 100% \
-				;;
-		esac
-		return 0
-	}
-
 	makeHome() {
 	    case $separete_home in
-		s|sim)
-		    if [[ "$home_fs" != "tmpfs" ]]; then
-				wipefs -a "$home_disk"
+			s|sim)
+		        if [[ "$home_fs" != "tmpfs" ]]; then
+					wipefs -a "$home_disk"
 
-    		    [[ "$scheme" == "disk" ]] && parted "$home_disk" mklabel gpt
-            fi
+    		        [[ "$scheme" == "disk" ]] && parted "$home_disk" mklabel gpt
+                fi
             ;;
 		esac
 
@@ -109,66 +79,24 @@
 				mkfs.$home_fs -L home -f $home_disk # cria a home com as opcoes escolhidas
 				sync
 				mount -o noatime $home_disk /mnt/home # monta a home
-				;;
+			;;
 			f2fs)
 				mkfs.$home_fs -l home -f $home_disk # cria a home com as opcoes escolhidas
 				sync
 				mount -o noatime $home_disk /mnt/home # monta a home
-				;;
+			;;
 			zfs)
 				zpool create -f -o ashift=12 -m none home $home_disk # cria um pool
 				zfs create -o mountpoint=legacy home/user # cria um dataset
 				mount -t zfs home/user /mnt/home # monta o dataset
 				sed -i '13c\  zfsH = true;' $file
 				warn "LEMBRE-SE DE EXPORTAR O POOL HOME NO TEMPHOME!"
-				;;
+			;;
 			tmpfs)
 				sed -i \
 					-e "133c\    ./ephemeral/tmpfsH.nix" \
 					-e "14c\  tmpfsH = true;" \
 				"$file"
-				;;
+			;;
 		esac
-	}
-
-	install() {
-		# clona as configs
-		git clone $github /mnt/nix/git/
-
-		case $system_fs in
-			btrfs|zfs)
-				sed -i "10c\  fsBackend = \"$system_fs\";" $file
-
-				case $resp_ephemeral in
-					s|sim) sed -i "132c\    ./ephemeral/$system_fs.nix" $file;;
-				esac
-				;;
-			f2fs|ext4|xfs)
-				sed -i \
-					-e "10c\  fsBackend = \"common\";" \
-					-e "17c\  fsRoot = \"$system_fs\";" \
-				"$file"
-				;;
-			tmpfs)
-				sed -i \
-					-e "10c\  fsBackend = \"$system_fs\";" \
-					-e "132c\    ./ephemeral/tmpfs.nix" \
-				"$file"
-				;;
-		esac
-
-		case $resp2 in
-			s|sim) makeHome;;
-		esac
-
-		sed -i "20c\  users = [ \"$name\" ];" $file
-
-		# monta o boot
-		mount /dev/disk/by-label/BOOT /mnt/boot
-
-		# instala o sistema
-		warn "agora você pode instalar o sistema!"
-		success "sudo nixos-install --flake /mnt/nix/git#flake"
-
-		return 0
 	}
