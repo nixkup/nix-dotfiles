@@ -10,18 +10,16 @@
     sync
 
     # flags de para particao boot
-    parted $system_disk \
-        set 1 esp on \
-    	set 1 boot on \
+    parted $system_disk set 1 esp on
+    parted $system_disk set 1 boot on
 
     # cria a segunda particao usando o restante do disco
     case $separete_home in
         s|sim)
             parted -a optimal $system_disk mkpart primary 1GB 100%;;
     	n|nao)
-    	    parted -a optimal \
-    			$system_disk mkpart primary 1G 25% \
-    			$system_disk mkpart primary 25% 100% \
+    		parted -a optimal $system_disk mkpart primary 1G 25%
+    		parted -a optimal $system_disk mkpart primary 25% 100%
        ;;
     esac
 
@@ -33,10 +31,9 @@
             # Montar e criar subvolumes
             mount ${system_disk}2 /mnt
 
-            btrfs subvolume create \
-                /mnt/root \
-                /mnt/nix \
-                /mnt/safe \
+            btrfs subvolume create /mnt/root
+            btrfs subvolume create /mnt/nix
+            btrfs subvolume create /mnt/safe
 
             # Cria snapshot vazia
             btrfs subvolume snapshot -r /mnt/root /mnt/root-blank
@@ -50,9 +47,8 @@
             mkdir -p /mnt/{nix,safe,boot,home,nix/git}
 
             # Montar outros subvolumes do sistema
-            mount -o \
-                subvol=nix,noatime ${system_disk}2 /mnt/nix \
-                subvol=safe,noatime ${system_disk}2 /mnt/safe \
+            mount -o subvol=nix,noatime ${system_disk}2 /mnt/nix
+            mount -o subvol=safe,noatime ${system_disk}2 /mnt/safe
         ;;
         zfs)
             zpool create -f -o ashift=12 nixos ${system_disk}2 # ashift=12 é bom para SSDs
@@ -63,10 +59,9 @@
             zfs set acltype=posixacl nixos/system # define as permissões do ZFS como POSIX
 
             # cria sub-datasets
-            zfs create -p -o mountpoint=legacy \
-                nixos/system/root \
-                nixos/system/nix \
-                nixos/system/safe \
+            zfs create -p -o mountpoint=legacy nixos/system/root
+            zfs create -p -o mountpoint=legacy nixos/system/nix
+            zfs create -p -o mountpoint=legacy nixos/system/safe
 
             zfs set compression=lz4 nixos/system # compressão
 
@@ -74,9 +69,8 @@
             mount -t zfs nixos/system/root /mnt
             mkdir -p /mnt/{nix,safe,boot,home,nix/git}
 
-            mount -t zfs \
-                nixos/system/nix /mnt/nix \
-                nixos/system/safe /mnt/safe \
+            mount -t zfs nixos/system/nix /mnt/nix
+            mount -t zfs nixos/system/safe /mnt/safe
 
             zfs snapshot nixos/system/root@blank # cria uma snapshot vazia do root
         ;;
