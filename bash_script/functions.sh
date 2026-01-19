@@ -16,7 +16,7 @@
 
 	unidade() {
 		local prompt="$1"
-		local type="$2"	
+		local type="$2"
 		local dev
 
 		while true; do
@@ -63,31 +63,43 @@
 	boot() {
 		# reconstroi o disco com gpt
 		wipefs -a $system_disk
-		parted $system_disk mklabel gpt
-		
+		parted $system_disk mklabel $gptOrMbr
+
 		# cria particao de 1GB para boot
 		parted -a optimal $system_disk mkpart primary 0% 1GB
-		
+
 		# formata a particao de boot para fat32
 		mkfs.fat -F 32 -n BOOT ${system_disk}1
 		sync
-		
+
 		# flags de para particao boot
-		parted $system_disk set 1 esp on
-		parted $system_disk set 1 boot on
+		parted $system_disk \
+		    set 1 esp on \
+			set 1 boot on \
 
-		# cria a  segunda particao usando o restante do disco
-		parted -a optimal $system_disk mkpart primary 1GB 100%
-
+		# cria a segunda particao usando o restante do disco
+		case $separete_home in
+		    s|sim)
+		        parted -a optimal $system_disk mkpart primary 1GB 100%;;
+			n|nao)
+			    parted -a optimal \
+					$system_disk mkpart primary 1G 25% \
+					$system_disk mkpart primary 25% 100% \
+				;;
+		esac
 		return 0
 	}
 
 	makeHome() {
-		if [[ "$home_fs" != "tmpfs" ]]; then
-    		wipefs -a "$home_disk"
+	    case $separete_home in
+		s|sim)
+		    if [[ "$home_fs" != "tmpfs" ]]; then
+				wipefs -a "$home_disk"
 
-    		[[ "$scheme" == "disk" ]] && parted "$home_disk" mklabel gpt
-		fi
+    		    [[ "$scheme" == "disk" ]] && parted "$home_disk" mklabel gpt
+            fi
+            ;;
+		esac
 
 		# muda nas configuracoes para o fs da home escolhido
 		sed -i "18c\  fsHome = \"$home_fs\";" $file
@@ -118,11 +130,11 @@
 				;;
 		esac
 	}
-	
+
 	install() {
 		# clona as configs
-		git clone https://github.com/vulkce/Nix_dotfiles /mnt/nix/git/
-		
+		git clone $github /mnt/nix/git/
+
 		case $system_fs in
 			btrfs|zfs)
 				sed -i "10c\  fsBackend = \"$system_fs\";" $file
