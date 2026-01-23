@@ -8,7 +8,8 @@
     wget
     gparted
     haguichi
-    
+    cryptsetup
+
     # desenvolvimento
     pipenv
     python314
