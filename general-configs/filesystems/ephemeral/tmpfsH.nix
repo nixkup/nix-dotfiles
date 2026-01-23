@@ -23,9 +23,11 @@
           ".zen"
           ".themes"
           ".icons"
+          ".npm"
         ];
         files = [ 
           ".zshenv"
+          ".z"
         ];
       };
     };
