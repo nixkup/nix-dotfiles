@@ -50,19 +50,28 @@
       enableCompletion = true;
       autosuggestions.enable = true;
       syntaxHighlighting.enable = true;
-      
+
       shellAliases = {
-        u = "cd ..";
-        l = "ls -a";
-        ll = "ls -l";
-        la = "ls -la";
-        c = "clear";
-        reflink = "cp --reflink=always";
-        pkg = "nix shell";
-        zfreeze = "doas zfs snapshot";
-        bfreeze = "doas btrfs subvolume snapshot";
-        switch = "doas nixos-rebuild switch --flake --specialisation TempHome";
-        update = "doas nixos-rebuild switch --upgrade --flake --specialisation TempHome";
+        # general
+        u         = "cd ..";
+        l         = "ls -l";
+        la        = "ls -la";
+        c         = "clear";
+        reflink   = "cp --reflink=always";
+
+        # filesystem
+        zfreeze   = "doas zfs snapshot";
+        bfreeze   = "doas btrfs subvolume snapshot";
+        lfreeze   = "doas lvcreate -L 1G -s -n";
+        lusage    = "doas lvs -a -o +lv_size,data_percent";
+        ladd      = "doas lvresize -L";
+
+        # nixos - meu NH caseiro
+        pkg       = "nix shell";
+        switch    = "doas nixos-rebuild switch --flake --specialisation TempHome";
+        update    = "doas nixos-rebuild switch --upgrade --flake --specialisation TempHome";
+        fupdate   = "nix flake update";
+        allupdate = "fupdate && update";
       };
 
       ohMyZsh = {
@@ -70,10 +79,10 @@
         plugins = [ "git" "z" ];
         theme = "robbyrussell";
       };
-      
+
       histSize = 10000;
       histFile = "$HOME/.zsh_history";
-      
+
       setOptions = [
         "HIST_IGNORE_ALL_DUPS"
       ];
