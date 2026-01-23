@@ -36,7 +36,6 @@
 	warn " --------------AVISOS-----------------"
 	info " comente o packages.nix na flake para uma instalação limpa!"
 	info " caso ja possua uma home sera necessario montar manualmente!"
-	info " NUNCA USE A MESMA UNIDADE PARA O SISTEMA E HOME!!!"
 	info " lembre-se de colocar sua senha em /mnt/nix/ antes de instalar!"
 	warn " -------------------------------------"
 
