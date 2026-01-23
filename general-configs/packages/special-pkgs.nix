@@ -57,7 +57,6 @@
         l         = "ls -l";
         la        = "ls -la";
         c         = "clear";
-        reflink   = "cp --reflink=always";
 
         # filesystem
         zfreeze   = "doas zfs snapshot";
@@ -65,6 +64,7 @@
         lfreeze   = "doas lvcreate -L 1G -s -n";
         lusage    = "doas lvs -a -o +lv_size,data_percent";
         ladd      = "doas lvresize -L";
+        reflink   = "cp --reflink=always";
 
         # nixos - meu NH caseiro
         pkg       = "nix shell";
