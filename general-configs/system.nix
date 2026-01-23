@@ -5,13 +5,13 @@
   # define e configura options do boot
   boot = {
     loader.systemd-boot.enable = true;
-
     kernelPackages = pkgs.linuxPackages;
+
     kernelModules = [ # modulos do kernel
-      "kvm-amd" 
-      "hid_playstation" 
-      "hid_sony" 
-      "uinput" 
+      "kvm-amd"
+      "hid_playstation"
+      "hid_sony"
+      "uinput"
     ];
 
     kernelParams = [
@@ -21,27 +21,27 @@
     ];
 
     initrd = {
-      availableKernelModules = [ 
-        "xhci_pci" 
-        "ahci" 
-        "usbhid" 
-        "usb_storage" 
-        "sd_mod" 
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
       ];
 
-      kernelModules = [ 
-        "dm-snapshot" 
+      kernelModules = [
+        "dm-snapshot"
       ];
     };
   };
 
   # options do networking
   networking = {
-    hostName = "kups"; # configura o hostname 
+    hostName = "kups"; # configura o hostname
     hostId = "8bec9fba"; # configura o hostId para o zfs
     networkmanager.enable = true; # usa o networkmanager
     useDHCP = lib.mkDefault true; # usa o DHCP
-    
+
     firewall = {
       enable = true;
       allowedTCPPorts = [ 80 4580 9090 ];
@@ -76,7 +76,7 @@
   time = {
     timeZone = "America/Sao_Paulo";
   };
-  
+
   # versão no qual a primeira build foi feita!
   system = {
     stateVersion = "26.05";
@@ -87,15 +87,15 @@
   users.users.nixkup = {
     isNormalUser = true;
     createHome = true;
-    home = "/home/nixkup"; 
+    home = "/home/nixkup";
     hashedPasswordFile = "/nix/passwords/nixkup";
     shell = pkgs.zsh;
 
-    extraGroups = [ 
-      "wheel" 
-      "networkmanager" 
-      "vboxusers" 
-      "docker" 
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "vboxusers"
+      "docker"
     ];
   };
 
@@ -108,7 +108,7 @@
       enable = true;
       extraRules = [{
         users = [ "nixkup" ];
-        keepEnv = true; 
+        keepEnv = true;
         persist = true;
       }];
     };
@@ -148,7 +148,7 @@
     };
   };
 
-  imports = [ 
-    (modulesPath + "/installer/scan/not-detected.nix") # importa configurações de hardware não detectadas 
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix") # importa configurações de hardware não detectadas
   ];
 }
