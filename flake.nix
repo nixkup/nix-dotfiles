@@ -7,6 +7,7 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
     impermanence.url = "github:nix-community/impermanence";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -24,6 +25,7 @@
 
   outputs = inputs @ {
     self,
+    nix-cachyos-kernel,
     zen-browser,
     nixpkgs-stable,
     nixpkgs,
@@ -41,7 +43,16 @@
         ./general-configs/interfaces.nix # importa as interfaces
         ./general-configs/packages/packages.nix # importa os pacotes
         ./general-configs/packages/special-pkgs.nix # importa pacotes especiais
-        
+
+        (
+          { pkgs, ... }:
+          {
+            nixpkgs.overlays = [
+              nix-cachyos-kernel.overlays.pinned
+            ];
+          }
+        )
+
         impermanence.nixosModules.impermanence
         home-manager.nixosModules.home-manager
 

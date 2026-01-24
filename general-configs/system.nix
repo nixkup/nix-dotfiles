@@ -5,7 +5,8 @@
   # define e configura options do boot
   boot = {
     loader.systemd-boot.enable = true;
-    kernelPackages = pkgs.linuxPackages;
+    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts-lto;
+    zfs.package = config.boot.kernelPackages.zfs_cachyos;
 
     kernelModules = [ # modulos do kernel
       "kvm-amd"
@@ -63,9 +64,12 @@
     settings = { # configura o uso de várias threads
       max-jobs = "auto"; # usa todos os cores
       cores = 0; # distribui a carga
+
       experimental-features = [ "nix-command" "flakes" ]; # experimental
+      substituters = [ "https://attic.xuyh0120.win/lantian" ];
+      trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+      };
     };
-  };
 
   nixpkgs = {
     hostPlatform = lib.mkDefault "x86_64-linux"; # faz o nixpkgs seguir a arch da CPU
