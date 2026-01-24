@@ -17,6 +17,7 @@
       gnome-secrets
       protonvpn-gui
       obs-studio
+      lutris
 
       # desenvolvimento
       sqlitebrowser
