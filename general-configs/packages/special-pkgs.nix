@@ -3,7 +3,7 @@
 # -------- DOCKER --------
 
   virtualisation.docker = {
-    enable = false;
+    enable = true;
 
     daemon.settings = {
       experimental = true;
@@ -69,7 +69,7 @@
         # nixos - meu NH caseiro
         pkg       = "nix shell";
         switch    = "doas nixos-rebuild switch --flake --specialisation TempHome";
-        update    = "doas nixos-rebuild switch --upgrade --flake --specialisation TempHome";
+        update    = "switch --upgrade";
         fupdate   = "nix flake update";
         allupdate = "fupdate && update";
       };
