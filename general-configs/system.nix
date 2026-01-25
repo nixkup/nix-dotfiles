@@ -64,10 +64,9 @@
     settings = { # configura o uso de várias threads
       max-jobs = "auto"; # usa todos os cores
       cores = 0; # distribui a carga
-
       experimental-features = [ "nix-command" "flakes" ]; # experimental
-      substituters = [ "https://attic.xuyh0120.win/lantian" ];
-      trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+      #substituters = [ "https://attic.xuyh0120.win/lantian" ];
+      #trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
       };
     };
 
@@ -88,19 +87,21 @@
 
 # -------- USERS --------
 
-  users.users.nixkup = {
-    isNormalUser = true;
-    createHome = true;
-    home = "/home/nixkup";
-    hashedPasswordFile = "/nix/passwords/nixkup";
-    shell = pkgs.zsh;
+  users.users = {
+    nixkup = {
+      isNormalUser = true;
+      createHome = true;
+      home = "/home/nixkup";
+      hashedPasswordFile = "/nix/passwords/nixkup";
+      shell = pkgs.zsh;
 
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-      "vboxusers"
-      "docker"
-    ];
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+        "vboxusers"
+        "docker"
+      ];
+    };
   };
 
 # -------- SECURITY --------
@@ -134,8 +135,10 @@
   };
 
   hardware = {
-    cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     amdgpu.opencl.enable = true;
+
+    cpu.amd.updateMicrocode =
+      lib.mkDefault config.hardware.enableRedistributableFirmware;
 
     graphics = {
       enable = true;
@@ -145,6 +148,7 @@
     bluetooth = {
       enable = true;
       powerOnBoot = true; # inicia o bluetooth no boot
+
       settings.General = {
         ControllerMode = "bredr";
         Experimental = true; # mostra mais informações sobre o dispositivo
