@@ -20,12 +20,13 @@
 # -------- SERVICES --------
 
   services = {
+    #opensnitch.enable = true;
     flatpak.enable = true;
     logmein-hamachi.enable = true;
 
     openssh = {
       enable = true;
-      ports = [ 4080 ]; # porta do servidor ssh
+      ports = [ 22 ]; # porta do servidor ssh
 
       settings = {
         PasswordAuthentication = true; # permite login por senha

@@ -18,6 +18,7 @@
       protonvpn-gui
       obs-studio
       lutris
+      grim
 
       # desenvolvimento
       sqlitebrowser

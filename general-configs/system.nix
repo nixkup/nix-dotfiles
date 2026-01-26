@@ -45,8 +45,15 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 4580 9090 ];
-      allowedUDPPorts = [ ];
+
+      allowedUDPPortRanges = [
+        { from = 4580; to = 19132; }
+      ];
+
+      allowedTCPPortRanges = [
+        { from = 22; to = 9090; }
+        { from = 4580; to = 80; }
+      ];
     };
   };
 
