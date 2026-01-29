@@ -1,29 +1,29 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, vars, pkgs, ... }: {
 
-	imports = [  
+	imports = [
     ./filesystems/definition.nix
   ];
-  
+
 # -------- FILESYSTEM --------
 
-  fileSystems = { 
+  fileSystems = {
     # Userspace
-    "/home/nixkup/Documents/etc1" = {
+    "/home/${vars.user}/Documents/etc1" = {
       device = "/dev/disk/by-uuid/2896792c-503e-4e52-bbd6-05fc5ae67675";
       fsType = "btrfs";
       options = [ "users" "exec" "nofail" ];
     };
-    "/home/nixkup/Documents/HD1" = {
+    "/home/${vars.user}/Documents/HD1" = {
       device = "/dev/disk/by-uuid/2a01b06c-f29d-4375-9c18-f5d3733df8e7";
       fsType = "btrfs";
       options = [ "users" "exec" "nofail" ];
     };
-    "/home/nixkup/Documents/HD2" = {
+    "/home/${vars.user}/Documents/HD2" = {
       device = "/dev/disk/by-uuid/1b8e11e0-d2f3-4d74-833a-1a1aca422b89";
       fsType = "btrfs";
       options = [ "users" "exec" "nofail" ];
     };
-    "/home/nixkup/Documents/etc2" = {
+    "/home/${vars.user}/Documents/etc2" = {
       device = "/dev/disk/by-uuid/d47d9f1f-c57e-41b9-95cd-48f75d0500c8";
       fsType = "btrfs";
       options = [ "users" "exec" "nofail" ];

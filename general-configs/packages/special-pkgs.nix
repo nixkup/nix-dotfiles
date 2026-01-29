@@ -1,4 +1,10 @@
-{ config, lib, inputs, pkgs, ... }: {
+{ config, lib, vars, inputs, pkgs, ... }:
+let
+#  kubeMasterIP = "127.0.0.1";
+#  kubeMasterHostname = "api.kube";
+#  kubeMasterAPIServerPort = 6443;
+in
+{
 
 # -------- DOCKER --------
 
@@ -32,7 +38,7 @@
         PasswordAuthentication = true; # permite login por senha
         KbdInteractiveAuthentication = false; # login interativo
         PermitRootLogin = "no"; # login no root
-        AllowUsers = [ "nixkup" ];
+        AllowUsers = [ "${vars.user}" ];
       };
     };
 
@@ -41,6 +47,29 @@
       pulse.enable = true; # ativa compatibilidade com pulseaudio
       jack.enable = true; # ativa compatibilidade com o jack
     };
+
+    #kubernetes = {
+    #  masterAddress = kubeMasterHostname;
+    #  apiserverAddress = "https://${kubeMasterHostname}:${toString kubeMasterAPIServerPort}";
+    #  easyCerts = true;
+    #  addons.dns.enable = true;
+    #  kubelet.extraOpts = "--fail-swap-on=false";
+
+    #  apiserver = {
+    #    securePort = kubeMasterAPIServerPort;
+    #    advertiseAddress = kubeMasterIP;
+    #  };
+
+    #  roles = [
+    #    "master"
+    #    "node"
+    #  ];
+
+    #  pki = {
+    #    enable = true;
+    #    etcClusterAdminKubeconfig = "kubernetes/cluster-admin.kubeconfig";
+    #  };
+    #};
   };
 
 # -------- PROGRAMS --------
@@ -73,6 +102,7 @@
         update    = "switch --upgrade";
         fupdate   = "nix flake update";
         allupdate = "fupdate && update";
+        mypc = "fastfetch";
       };
 
       ohMyZsh = {
@@ -93,7 +123,7 @@
       enable = true;
       clean.enable = true; # faz o trabalho do cg
       clean.extraArgs = "--keep-since 4d --keep 3";
-      flake = "/home/nixkup/config"; # localização da minha flake
+      flake = "/home/${vars.user}/config"; # localização da minha flake
     };
   };
 }

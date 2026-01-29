@@ -1,4 +1,9 @@
-{ config, lib, pkgs, modulesPath, ... }: {
+{ config, lib, vars, pkgs, modulesPath, ... }:
+let
+  #kubeMasterIP = "127.0.0.1";
+  #kubeMasterHostname = "api.kube";
+in
+{
 
 # -------- NIXOS --------
 
@@ -42,12 +47,13 @@
     hostId = "8bec9fba"; # configura o hostId para o zfs
     networkmanager.enable = true; # usa o networkmanager
     useDHCP = lib.mkDefault true; # usa o DHCP
+    #extraHosts = "${kubeMasterIP} ${kubeMasterHostname}";
 
     firewall = {
-      enable = true;
+      enable = false;
 
       allowedUDPPortRanges = [
-        { from = 4580; to = 19132; }
+        { from = 4220; to = 19132; }
       ];
 
       allowedTCPPortRanges = [
@@ -74,8 +80,8 @@
       experimental-features = [ "nix-command" "flakes" ]; # experimental
       #substituters = [ "https://attic.xuyh0120.win/lantian" ];
       #trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
-      };
     };
+  };
 
   nixpkgs = {
     hostPlatform = lib.mkDefault "x86_64-linux"; # faz o nixpkgs seguir a arch da CPU
@@ -95,11 +101,11 @@
 # -------- USERS --------
 
   users.users = {
-    nixkup = {
+    ${vars.user} = {
       isNormalUser = true;
       createHome = true;
-      home = "/home/nixkup";
-      hashedPasswordFile = "/nix/passwords/nixkup";
+      home = "/home/${vars.user}";
+      hashedPasswordFile = "/nix/passwords/${vars.user}";
       shell = pkgs.zsh;
 
       extraGroups = [
@@ -115,11 +121,12 @@
 
   security = {
     sudo.enable = false;
+    rtkit.enable = false;
 
     doas = {
       enable = true;
       extraRules = [{
-        users = [ "nixkup" ];
+        users = [ vars.user ];
         keepEnv = true;
         persist = true;
       }];

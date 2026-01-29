@@ -1,8 +1,7 @@
-{ config, pkgs, inputs, ... }: {
-
+{ config, pkgs, vars, inputs, ... }: {
   home = {
-    username = "nixkup";
-    homeDirectory = "/home/nixkup";
+    username = "${vars.user}";
+    homeDirectory = "/home/${vars.user}";
     stateVersion = "26.05";
 
     packages = with pkgs; [
@@ -19,11 +18,17 @@
       obs-studio
       lutris
       grim
+      slurp
+      unzip
+      nautilus
+      yazi
+      kitty
 
       # desenvolvimento
       sqlitebrowser
       jetbrains.idea
       zed-editor
+      insomnia
 
       # non-free
       vesktop
@@ -34,8 +39,8 @@
   programs.git = {
     enable = true;
     settings = {
-      user.name = "nixkup";
-      user.email = "nixkup@proton.me";
+      user.name = "${vars.user}";
+      user.email = "${vars.user}@proton.me";
     };
   };
 

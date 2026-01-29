@@ -4,14 +4,14 @@
     initrd.systemd = {
       enable = true;
       services.initrd-rollback-root = {
-        after = [ 
+        after = [
           "zfs-import-nixos.service"
         ];
-        wantedBy = [ 
-          "initrd.target" 
+        wantedBy = [
+          "initrd.target"
         ];
-        before = [ 
-          "sysroot.mount" 
+        before = [
+          "sysroot.mount"
         ];
         path = with pkgs; [ zfs ];
         description = "Rollback para SnapShot em branco";
@@ -32,15 +32,19 @@
 		directories = [
 		  "/etc/nixos"
 		  "/var/lib/flatpak"
+			"/var/lib/kubernetes"
+			"/var/lib/etcd"
+			"/var/lib/cfssl"
+			"/etc/kubernetes"
 		  "/var/lib/nixos"
 		  "/var/lib/nixos-containers"
 		  "/var/lib/systemd/coredump"
 		  "/var/lib/bluetooth"
-		  "/etc/NetworkManager/system-connections" 
+		  "/etc/NetworkManager/system-connections"
 		];
 		files = [
 		  "/etc/machine-id"
       "/root/.gitconfig"
 		];
-	};	
+	};
 }

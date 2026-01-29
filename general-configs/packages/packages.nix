@@ -17,6 +17,7 @@
     nodejs
     devspace
     javaPackages.compiler.openjdk25
+    docker-compose
 
     # WMs - geral
     alacritty
@@ -24,6 +25,10 @@
     swaybg
     waybar
     labwc
+    xdg-utils
+    wlr-randr
+    wofi
+    xwayland-satellite
 
     # hyprland
     hyprshot
@@ -35,11 +40,22 @@
     #gnome-disk-utility
 
     # kde plasma
-    kdePackages.dolphin
     kdePackages.qtstyleplugin-kvantum
 
     # fonts
     adwaita-fonts
+
+    # kubernetes
+    kompose
+    kubectl
+    kubernetes
+    cfssl
+
+    # cria um binário "sudo" para o doas
+    (pkgs.writeScriptBin "sudo" ''
+        #!${pkgs.stdenv.shell}
+        exec doas "$@"
+    '')
 
     # inputs
     inputs.zen-browser.packages."${stdenv.hostPlatform.system}".default

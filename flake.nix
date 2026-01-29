@@ -31,11 +31,20 @@
     nixpkgs,
     impermanence,
     home-manager,
-  }: {
+  }:
+  let
+    vars = {
+      user = "nixkup";
+    };
+  in
+  {
     nixosConfigurations.kups = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
-      specialArgs = { inherit inputs; };
+      specialArgs = {
+        inherit inputs;
+        inherit vars;
+      };
 
       modules = [
         ./general-configs/system.nix # importa as configs do sistema
@@ -59,8 +68,12 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs.flake-inputs = inputs;
-          home-manager.users.nixkup = import ./home-manager/home.nix;
+          home-manager.users.${vars.user} = import ./home-manager/home.nix;
+
+          home-manager.extraSpecialArgs = {
+            flake-inputs = inputs;
+            inherit vars;
+          };
         }
       ];
     };
