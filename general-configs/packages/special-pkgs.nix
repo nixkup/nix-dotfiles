@@ -83,6 +83,7 @@ in
 
       shellAliases = {
         # general
+        mypc      = "fastfetch";
         u         = "cd ..";
         l         = "ls -l";
         la        = "ls -la";
@@ -102,7 +103,6 @@ in
         update    = "switch --upgrade";
         fupdate   = "nix flake update";
         allupdate = "fupdate && update";
-        mypc = "fastfetch";
       };
 
       ohMyZsh = {
